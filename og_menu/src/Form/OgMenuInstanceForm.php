@@ -6,8 +6,6 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
@@ -84,10 +82,6 @@ class OgMenuInstanceForm extends ContentEntityForm {
    *
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
    * @param \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager
    *   The menu link manager.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_tree
@@ -99,8 +93,8 @@ class OgMenuInstanceForm extends ContentEntityForm {
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The URL generator.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time, MenuLinkManagerInterface $menu_link_manager, MenuLinkTreeInterface $menu_tree, LinkGeneratorInterface $link_generator, OgAccessInterface $og_access, UrlGeneratorInterface $url_generator) {
-    parent::__construct($entity_repository, $entity_type_bundle_info, $time);
+  public function __construct(EntityRepositoryInterface $entity_repository, MenuLinkManagerInterface $menu_link_manager, MenuLinkTreeInterface $menu_tree, LinkGeneratorInterface $link_generator, OgAccessInterface $og_access, UrlGeneratorInterface $url_generator) {
+    parent::__construct($entity_repository);
     $this->menuLinkManager = $menu_link_manager;
     $this->menuTree = $menu_tree;
     $this->linkGenerator = $link_generator;
@@ -114,8 +108,6 @@ class OgMenuInstanceForm extends ContentEntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity.repository'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('datetime.time'),
       $container->get('plugin.manager.menu.link'),
       $container->get('menu.link_tree'),
       $container->get('link_generator'),
